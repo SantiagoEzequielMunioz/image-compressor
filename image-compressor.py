@@ -1,4 +1,4 @@
-from PIL import Image
+from PIL import Image,ImageTk
 from tkinter import Entry, Frame,Label, StringVar,Tk,Menu,Button, filedialog, messagebox, Toplevel
 
 class Aplicacion(Frame):
@@ -8,6 +8,9 @@ class Aplicacion(Frame):
         self.master=master
         self.config(bg='#B0BEC5',padx=10)
         self.pack(expand=1,fill='both',anchor='center')
+        img_portada=Image.open('portada2.jpg')
+        img_portada=img_portada.resize((800,700))
+        self.img=ImageTk.PhotoImage(img_portada)
 
         ### MENUS ###
         filemenu=Menu(barra_menu,tearoff=0)
@@ -26,15 +29,17 @@ class Aplicacion(Frame):
     ### INTERFAZ - LABELS Y ENTRYS ###
         self.campo=StringVar()
         self.ruta_img=None
-        self.titulo=Label(self,text='BUSQUE LA IMAGEN QUE DESEE COMPRIMIR',font=('Verdana',16),height=3).grid(row=0,column=0,columnspan=3,pady=10,sticky='ew')
+
+        self.portada=Label(self,image=self.img,border=0).grid(row=0,column=0,columnspan=3,pady=10,sticky='nsew')
+        # Label(self,text='COMPRESOR DE IMÁGENES',font=('Arial Italic',24),justify='center',bg='black',fg='white').place(relx=0.2,rely=0.1,relwidth=0.6)
         self.subtitulo=Label(self,text='Ruta de archivo:',bg='#B0BEC5',font=('Verdana',12)).grid(row=1,column=0,ipady=15,padx=(10,5))
-        self.entrada=Entry(self,width=60,font=('Arial',12),textvariable=self.campo,state='readonly').grid(row=1,column=1,ipady=15)
-        self.search=Button(self,text='Buscar...',font=('Verdana',12),command=self.buscar)
+        self.entrada=Entry(self,width=50,font=('Arial',12),textvariable=self.campo,state='readonly').grid(row=1,column=1,ipady=15)
+        self.search=Button(self,text='Buscar...',font=('Verdana',12),activebackground='blue',command=self.buscar)
         self.search.grid(row=1,column=2,padx=20)
         self.convertir=Button(self,text='CONVERTIR',font=('Verdana',12),command=self.conversor).grid(row=2,column=0,columnspan=3,pady=10)
 
-        self.grid_rowconfigure((0,2),weight=2)
-        self.grid_rowconfigure(1,weight=1)
+        self.grid_rowconfigure(0,weight=3)
+        self.grid_rowconfigure((1,2),weight=1)
         self.grid_columnconfigure((0,1,2),weight=1)
 
     ### BUSCADOR ###
@@ -85,5 +90,7 @@ if __name__ == '__main__':
     barra_menu=Menu(root)
     root.config(menu=barra_menu)
     root.iconbitmap('anclalogo.ico')
+    root.geometry('800x750+20+20')
+    root.wm_minsize(800,800)
     app=Aplicacion(root)
     app.mainloop()
